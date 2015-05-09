@@ -194,10 +194,12 @@ def unpacklz91(data, outfile):
   # header is now 0x1C + relocnt*4 and round up to nearest 0x10
   headersize = headerdata['relocnt']*4 + 0x1C
   extra = headersize % 0x10
+  padbytes = 0
   if extra > 0:
-    headersize = headersize + 0x10 - extra
+    padbytes = 0x10 - extra
+  headersize = headersize + padbytes
   # remember we need padding on end of header
-  padding = ''.join(['\x00' for x in range(0x10 - extra)])
+  padding = ''.join(['\x00' for x in range(padbytes)])
   headerdata['hdrsize'] = headersize/0x10
   # can now calculate total file size
   filesize = headersize + len(unpackeddata)
